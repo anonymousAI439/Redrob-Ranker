@@ -1,0 +1,92 @@
+# Redrob Hackathon — Submission Metadata
+
+# ============================================================================
+# Team identity
+# ============================================================================
+team_name: "RankForge AI"
+
+primary_contact:
+  name: "Sikkireddy Lakshmi Shanmukha"
+  email: "shanmukhasikkireddy@gmail.com"
+  phone: "+91 9059063681"
+
+# ============================================================================
+# Code and reproducibility
+# ============================================================================
+github_repo: "https://github.com/anonymousAI439/Redrob-Ranker"
+
+sandbox_link: "https://redrob-ranker-qgxxmqjappqmwnkmkq4ujr4.streamlit.app"
+
+# app.py in this repo is a ready-to-deploy
+# Spaces (see README.md "Deploying the sandbox"). Docker is also provided
+# (Dockerfile) as a fallback per Section 10.5 of submission_spec.md.
+
+reproduce_command: "python rank.py --candidates ./candidates.jsonl.gz --out ./submission.csv"
+
+# README.md "Performance" for the full benchmark.
+
+# ============================================================================
+# Compute environment
+# ============================================================================
+compute:
+  platform: "HP Notebook (Intel Core i3-6006U)"
+  cpu_cores: 2                       
+  ram_gb: 8                         
+  python_version: "3.10.2"             
+  os: "Microsoft Windows 10 Pro N (Version 10.0.19045 Build 19045)"
+  uses_gpu_for_inference: false      
+  has_network_during_ranking: false  
+  pre_computation_required: false    
+  pre_computation_time_minutes: 0
+
+# ============================================================================
+# AI tools declaration
+# ============================================================================
+ai_tools_used:
+  - "Claude"
+  - "ChatGPT"
+
+ai_usage_summary: |
+  AI was used extensively as a development assistant throughout the project
+  to help generate code, suggest algorithms, and explore different
+  implementation approaches. I designed the overall solution, iteratively
+  modified and redesigned the architecture, evaluated alternative approaches,
+  integrated the components, and tested the final pipeline until it met the
+  challenge requirements. All final implementation decisions were made by me,
+  and I can explain and defend every part of the solution. No candidate data
+  is sent to any AI model during ranking—the final pipeline runs entirely
+  offline in Python with no model inference or network calls.
+
+# ============================================================================
+# Approach summary
+# ============================================================================
+methodology_summary: |
+  Deterministic, CPU-only, network-free rule-based ranker (no embedding
+  model, no GPU). Six weighted components: career-narrative concept match
+  (30%, scans career_history descriptions — not just the skills list — for
+  embeddings/retrieval/ranking/LLM substance), title fit (15%, also acts as
+  a GATE on the skills score so a non-technical title with stuffed AI
+  keywords can't outrank a real practitioner), skills fit (20%, trust-
+  weighted by endorsements, duration_months, and Redrob's own
+  skill_assessment_scores so unendorsed zero-duration "expert" claims are
+  discounted), experience-band fit (15%, soft peak at 6-8 years), location
+  (12%, Pune/Noida/Tier-1 preferred), and education (8%, low weight per the
+  JD). A multiplicative behavioral-signal modifier (recency, recruiter
+  response rate, interview completion, open-to-work, notice period,
+  verification) scales the result. A separate integrity gate excludes
+  candidates tripping >=2 independent hard-impossibility checks (job
+  duration exceeding total experience, "expert" skills with ~0 duration,
+  employment predating a known company's founding, malformed education
+  dates) — calibrated against the provided 50-candidate sample to avoid
+  false-positiving on ordinary synthetic noise. Runtime: ~85s / ~1.9GB peak
+  RAM for 100K candidates on a single CPU core.
+
+# ============================================================================
+# Declarations
+# ============================================================================
+declarations:
+  read_submission_spec: true
+  code_is_original_work: true       # AI-assisted per the rules above; reviewed/owned by the team
+  no_collusion: true
+  honeypot_check_done: true         # see features.py: integrity_flags() / integrity_gate()
+  reproduction_tested: true         # see README.md "Performance" for the benchmark run
