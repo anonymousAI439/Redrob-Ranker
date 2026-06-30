@@ -15,7 +15,7 @@ python validate_submission.py ./submission.csv
 ```
 
 No GPU, no API keys, no network calls during ranking.
-~1.9GB peak RAM for 100,000 candidates on a single CPU core
+~2GB peak RAM for 100,000 candidates on a single CPU core
 
 ## Repo layout
 
