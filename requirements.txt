@@ -1,0 +1,10 @@
+# Core ranking pipeline (rank.py) uses ONLY the Python 3.9+ standard library
+# (json, gzip, csv, re, math, hashlib, datetime, argparse) — zero third-party
+# dependencies, by design. This is the single biggest lever for a clean
+# Stage-3 reproduction: there is no version-pinning, no model download, and
+# no GPU/CUDA toolchain that can fail on the reviewer's machine.
+# sandbox demo (app.py), not for producing the submission CSV itself.
+numpy
+pyyaml
+pandas
+streamlit
